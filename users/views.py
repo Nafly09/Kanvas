@@ -1,17 +1,18 @@
+from urllib import response
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 
 from rest_framework.decorators import APIView
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from users.permissions import IsAdmin
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
-    HTTP_422_UNPROCESSABLE_ENTITY, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN)
+    HTTP_422_UNPROCESSABLE_ENTITY, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_204_NO_CONTENT)
 
-from users.serializers import LoginSerializer, UsersSerializers
-from users.models import Users
+from users.serializers import AddressSerializer, LoginSerializer, UsersSerializers
+from users.models import (Users, Address)
 
 
 class UsersView(APIView):
@@ -41,6 +42,25 @@ class UsersView(APIView):
         serializer = UsersSerializers(user)
 
         return Response(serializer.data, HTTP_201_CREATED)
+
+    def delete(self, request: Request):
+        serializer = UsersSerializers(request.user)
+        Users.objects.filter(email=serializer.data["email"]).delete()
+        return Response('', HTTP_204_NO_CONTENT)
+
+
+class AddressView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdmin]
+
+    def put(self, request: Request):
+        serializer = AddressSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        address, _ = Address.objects.get_or_create(
+            **serializer.validated_data)
+        address.users.add(request.user)
+        serializer = AddressSerializer(address)
+        return Response(serializer.data)
 
 
 class LoginView(APIView):
