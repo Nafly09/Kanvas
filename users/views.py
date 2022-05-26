@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate
 
 from rest_framework.decorators import APIView
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from users.permissions import IsAdmin
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -14,7 +16,7 @@ from users.models import Users
 
 class UsersView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = []
+    permission_classes = [IsAdmin]
 
     def get(self, request: Request):
         serializer = UsersSerializers(request.user)
