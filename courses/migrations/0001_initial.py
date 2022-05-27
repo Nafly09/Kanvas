@@ -16,15 +16,37 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Courses',
+            name="Courses",
             fields=[
-                ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=155)),
-                ('created_at', models.DateField(auto_now_add=True)),
-                ('demo_time', models.TimeField()),
-                ('link_repo', models.CharField(max_length=155)),
-                ('instructor', models.OneToOneField(default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='current_instructor', to=settings.AUTH_USER_MODEL)),
-                ('students', models.ManyToManyField(related_name='inlisted_courses', to=settings.AUTH_USER_MODEL)),
+                (
+                    "uuid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=155)),
+                ("created_at", models.DateField(auto_now_add=True)),
+                ("demo_time", models.TimeField()),
+                ("link_repo", models.CharField(max_length=155)),
+                (
+                    "instructor",
+                    models.OneToOneField(
+                        default=None,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="current_instructor",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "students",
+                    models.ManyToManyField(
+                        related_name="inlisted_courses", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
         ),
     ]
