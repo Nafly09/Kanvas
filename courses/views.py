@@ -36,7 +36,7 @@ class CoursesView(APIView):
 
         if found_course:
             return Response(
-                {"message": "Requested Course already exists"},
+                {"message": "Course already exists"},
                 HTTP_422_UNPROCESSABLE_ENTITY,
             )
 
@@ -53,6 +53,9 @@ class CoursesView(APIView):
 
 
 class CoursesByIdView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInstructor]
+
     def get(self, _: Request, course_id: None):
         if not course_id:
             return Response("OMEGALUL")
@@ -75,9 +78,9 @@ class CoursesByIdView(APIView):
                     **serializer.validated_data)
                 updated_course = Courses.objects.get(pk=course_id)
                 serializer = CourseSerializer(updated_course)
-                return Response(serializer.data, HTTP_201_CREATED)
+                return Response(serializer.data)
         except IntegrityError:
-            return Response({"message": "Course with the same name already exists."}, HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response({"message": "This course name already exists"}, HTTP_422_UNPROCESSABLE_ENTITY)
         except Courses.DoesNotExist:
             return Response({
                 "message": "Course does not exist"

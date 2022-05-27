@@ -7,3 +7,8 @@ class IsAdmin(BasePermission):
             return True
 
         return bool(request.user.is_authenticated and request.user.is_admin)
+
+
+class IsAuthenticated(BasePermission):
+    def has_permission(self, request, _):
+        return bool(request.user.is_authenticated)

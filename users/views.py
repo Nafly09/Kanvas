@@ -13,7 +13,7 @@ from rest_framework.status import (
 )
 
 from users.models import Address, Users
-from users.permissions import IsAdmin
+from users.permissions import IsAdmin, IsAuthenticated
 from users.serializers import AddressSerializer, LoginSerializer, UsersSerializers
 
 
@@ -59,7 +59,7 @@ class UsersView(APIView):
 
 class AddressView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def put(self, request: Request):
         serializer = AddressSerializer(data=request.data)
