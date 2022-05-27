@@ -1,4 +1,5 @@
 from uuid import uuid4
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -11,9 +12,10 @@ class Users(AbstractUser):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     address = models.ForeignKey(
-        "users.Address", on_delete=models.SET_NULL, related_name="users", null=True)
+        "users.Address", on_delete=models.SET_NULL, related_name="users", null=True
+    )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
 
