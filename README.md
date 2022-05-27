@@ -5,6 +5,9 @@
 #### Framework
 
 - Django
+
+#### Bibliotecas
+- python-dotenv
 - djangorestframework
 
 <br>
