@@ -11,3 +11,7 @@ class CourseSerializer(serializers.Serializer):
     link_repo = serializers.CharField()
     instructor = UsersSerializers(required=False)
     students = UsersSerializers(many=True, required=False)
+
+
+class InstructorSerializer(serializers.Serializer):
+    instructor_id = serializers.CharField()

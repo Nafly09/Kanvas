@@ -16,9 +16,11 @@ from rest_framework.status import (
 )
 
 
-from courses.serializers import CourseSerializer
+from courses.serializers import CourseSerializer, InstructorSerializer
 from courses.models import Courses
 from courses.permissions import IsInstructor
+
+from users.models import Users
 
 
 class CoursesView(APIView):
@@ -50,7 +52,7 @@ class CoursesView(APIView):
         return Response(serializer)
 
 
-class FilterCourses(APIView):
+class CoursesByIdView(APIView):
     def get(self, _: Request, course_id: None):
         if not course_id:
             return Response("OMEGALUL")
@@ -100,3 +102,41 @@ class FilterCourses(APIView):
             }, HTTP_404_NOT_FOUND)
         except ValidationError:
             return Response({"message": "Please inform a valid UUID"}, HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class CoursesInstructorsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInstructor]
+
+    def put(self, request: Request, course_id=None):
+        course: Courses = Courses.objects.filter(uuid=course_id)
+
+        if not course.first():
+            return Response(
+                {"message": "Course does not exist"}, HTTP_404_NOT_FOUND
+            )
+
+        serializer = InstructorSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        found_instructor: Users = Users.objects.filter(
+            uuid=serializer.validated_data["instructor_id"]
+        ).first()
+
+        if not found_instructor:
+            return Response(
+                {"message": "Invalid instructor_id"}, HTTP_404_NOT_FOUND
+            )
+
+        if not found_instructor.is_admin:
+            return Response(
+                {"message": "Instructor id does not belong to an admin"},
+                HTTP_422_UNPROCESSABLE_ENTITY,
+            )
+
+        Courses.objects.filter(
+            instructor=found_instructor).update(instructor=None)
+        course.update(instructor=found_instructor)
+        serializer = CourseSerializer(course.first())
+
+        return Response(serializer.data)
