@@ -15,3 +15,7 @@ class CourseSerializer(serializers.Serializer):
 
 class InstructorSerializer(serializers.Serializer):
     instructor_id = serializers.CharField()
+
+
+class StudentSerializer(serializers.Serializer):
+    students_id = serializers.ListField(child=serializers.CharField())

@@ -16,7 +16,7 @@ from rest_framework.status import (
 )
 
 
-from courses.serializers import CourseSerializer, InstructorSerializer
+from courses.serializers import CourseSerializer, InstructorSerializer, StudentSerializer
 from courses.models import Courses
 from courses.permissions import IsInstructor
 
@@ -138,5 +138,43 @@ class CoursesInstructorsView(APIView):
             instructor=found_instructor).update(instructor=None)
         course.update(instructor=found_instructor)
         serializer = CourseSerializer(course.first())
+
+        return Response(serializer.data)
+
+
+class CourseStudentsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsInstructor]
+
+    def put(self, request: Request, course_id=None):
+
+        course = Courses.objects.filter(uuid=course_id).first()
+
+        if not course:
+            return Response(
+                {"message": "Course does not exist"}, HTTP_404_NOT_FOUND
+            )
+
+        serializer = StudentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        students_list = []
+
+        for student_id in serializer.validated_data["students_id"]:
+            found_student: Users = Users.objects.filter(
+                uuid=student_id).first()
+            if not found_student:
+                return Response(
+                    {"message": "Invalid students_id list"}, HTTP_404_NOT_FOUND
+                )
+            if found_student.is_admin:
+                return Response(
+                    {"message": "Some student id belongs to an Instructor"},
+                    HTTP_422_UNPROCESSABLE_ENTITY,
+                )
+            students_list.append(found_student)
+
+        course.students.set(students_list)
+        serializer = CourseSerializer(course)
 
         return Response(serializer.data)
