@@ -16,17 +16,18 @@
 
 <p>Caso queira fazer uma clonagem e rodar o processo na sua máquina siga as seguintes instruções:</p>
 
-1 - Inicie um ambiente virtual (<code>venv</code>) no seu projeto:
+1 - Inicie um ambiente virtual (<code>venv</code>) no seu projeto (usamos o [`poetry`](https://python-poetry.org/) como gerenciador de pacotes):
 
 ```sh
-$ python -m venv venv && source venv/bin/activate
+$ pip install poetry
 ```
 
-2 - Instale as dependências presentes no arquivo <code>requirements.txt</code> com o seguinte comando no terminal:
+2 - Instale as dependências presentes no arquivo <code>pyproject.toml</code> com o seguinte comando no terminal:
 <br>
 
-```
-$ pip install -r requirements.txt
+``` sh
+$ poetry install # instala todos os pacotes
+$ # poetry install --only main # instala os pacotes usados em produção
 ```
 
 4 - Verifique as variáveis de ambientes de configuração necessárias no arquivo <code>.env.example</code>, crie uma cópia desse arquivo preencha as chaves necessárias e nomeie-o <code>.env</code>
@@ -34,10 +35,20 @@ $ pip install -r requirements.txt
 3 - Em seguida, inicie a aplicação django rodando o seguinte comando no terminal:
 <br>
 
-```
-$ ./manage.py runserver
+```sh
+$ task run
 ```
 
+### opcional
+1 - Para rodar os testes execute o comando:
+
+```sh
+$ task test
+```
+
+2 - para visualizar a cobertura dos testes abra o arquivo `htmlcov/index.html` em qualquer navegador.
+
+<br>
 <hr>
 <br>
 
