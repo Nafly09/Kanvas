@@ -12,9 +12,9 @@ from rest_framework.status import (
     HTTP_422_UNPROCESSABLE_ENTITY,
 )
 
-from users.models import Address, Users
-from users.permissions import IsAdmin, IsAuthenticated
-from users.serializers import AddressSerializer, LoginSerializer, UsersSerializers
+from kanvas.users.models import Address, Users
+from kanvas.users.permissions import IsAdmin, IsAuthenticated
+from kanvas.users.serializers import AddressSerializer, LoginSerializer, UsersSerializers
 
 
 class UsersView(APIView):

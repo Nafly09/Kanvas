@@ -1,6 +1,6 @@
 from django.urls import path
 
-from users.views import AddressView, LoginView, UsersView
+from kanvas.users.views import AddressView, LoginView, UsersView
 
 urlpatterns = [
     path("accounts/", UsersView.as_view()),
