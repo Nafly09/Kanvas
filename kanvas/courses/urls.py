@@ -1,6 +1,6 @@
 from django.urls import path
 
-from courses.views import CourseStudentsView, CoursesInstructorsView, CoursesView, CoursesByIdView
+from kanvas.courses.views import CourseStudentsView, CoursesInstructorsView, CoursesView, CoursesByIdView
 
 urlpatterns = [
     path("courses/", CoursesView.as_view()),

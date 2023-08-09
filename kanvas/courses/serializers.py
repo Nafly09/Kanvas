@@ -1,6 +1,6 @@
 from pkg_resources import require
 from rest_framework import serializers
-from users.serializers import UsersSerializers
+from kanvas.users.serializers import UsersSerializers
 
 
 class CourseSerializer(serializers.Serializer):

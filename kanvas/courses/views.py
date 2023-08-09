@@ -16,11 +16,11 @@ from rest_framework.status import (
 )
 
 
-from courses.serializers import CourseSerializer, InstructorSerializer, StudentSerializer
-from courses.models import Courses
-from courses.permissions import IsInstructor
+from kanvas.courses.serializers import CourseSerializer, InstructorSerializer, StudentSerializer
+from kanvas.courses.models import Courses
+from kanvas.courses.permissions import IsInstructor
 
-from users.models import Users
+from kanvas.users.models import Users
 
 
 class CoursesView(APIView):

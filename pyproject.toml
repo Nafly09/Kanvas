@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "kanvas"
+version = "0.1.0"
+description = ""
+authors = ["Danilo da Conceição Nascimento <31135098+danilodcn@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+taskipy = "^1.12.0"
+django = "^4.2.4"
+djangorestframework = "^3.14.0"
+psycopg2 = "^2.9.7"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+coverage = "^7.2.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.variables]
+run_command = "poetry run"
+
+[tool.taskipy.tasks]
+format = "isort kanvas && black kanvas"
+lint = "flake8 kanvas --count --show-source --statistics"
+run = "python manage.py runserver"
+test = "coverage run --source='.' manage.py test"
+post_test = "coverage html && rm .coverage"
+clear = "make clear"
